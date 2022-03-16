@@ -13,6 +13,14 @@
         .underlined{
           border-bottom: 3px solid currentColor;
         }
+
+        .reproved {
+          background-color: red
+        }
+
+        .approved {
+          background-color: green
+        }
       </style>
     </head>
 
@@ -21,14 +29,14 @@
        <div class="container">
 
         <div class="hero center card-panel materialize-red darken-4 white-text z-depth-3">
-          <h1 class="materialize-red-text text-lighten-3"> Curso Javascript Completo</h1>
-          
+          <h1 class="materialize-red-text text-lighten-3"> Atividade Tabela Dinâmica</h1>
         </div>
-        <h2 class="materialize-red-text text-lighten-2 underlined">Dados de Alunos</h2>
-
-        <table class="striped">
+        <h2 class="materialize-red-text text-lighten-2 underlined">Dados de Alunos<br></h2>
+        <h5>Verde = Approved</h5>
+        <h5>Vermelho = Reprovado</h5>
+        <table>
         <thead>
-          <tr>
+          
               <th>Nome</th>
               <th aluno-nota="n1">Nota 1</th>
               <th aluno-nota="n2">Nota 2</th>
@@ -36,7 +44,6 @@
               <th aluno-nota="n4">Nota 4</th>
               <th aluno-nota="media">Média</th>
               
-          </tr>
         </thead>
 
         <tbody>
@@ -61,20 +68,25 @@
                 { nome: "Lucas", notas: [4.5, 9, 8, 3] },
                 { nome: "Luana", notas: [3, 7, 9, 3] },
                 { nome: "Beatriz", notas: [10, 4, 7, 9] },
-                { nome: "Sergio", notas: [4.5, 9.5, 10, 2] }
+                { nome: "Sergio", notas: [4.5, 9.5, 10, 2] }                
             ];
 
             alunos.forEach((aluno) => {
-                    aluno.media = average(aluno.notas[0], aluno.notas[1], aluno.notas[2], aluno.notas[3])
+                    aluno.media = average(...aluno.notas)
+                    aluno.status = null;
+                    
+                    if(aluno.media >= 6) {
+                      aluno.status = "aprovado"
+                    } else {
+                      aluno.status = "reprovado"
+                    } 
+                    // aluno.media = average.apply(null, aluno.notas) = para browsers antigos
             })
             
             const html = alunos.map( aluno => `
-                <tr>
+                <tr class="${aluno.media < 6 ? "reproved": "approved"}">
                     <td>${aluno.nome}</td>
-                    <td>${aluno.notas[0]}</td>
-                    <td>${aluno.notas[1]}</td>
-                    <td>${aluno.notas[2]}</td>
-                    <td>${aluno.notas[3]}</td>
+                    ${aluno.notas.map(n => `<td> ${n} </td>`).join("")}
                     <td>${aluno.media}</td>
                 </tr>
             `).join("")
