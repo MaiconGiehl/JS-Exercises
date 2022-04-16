@@ -1,38 +1,48 @@
-const btnAdc = document.getElementById('btn');
-
-const check = document.getElementById('chkAceito');
+const formulario = document.querySelector('.formCadastro')
 const titulo = document.getElementById('txtTitulo');
 const descricao = document.getElementById('txtDescricao');
 
+const btnAdc = document.getElementById('btn');
+btnAdc.disabled = true;
+const check = document.getElementById('chkAceito');
+
+
 check.addEventListener('click', function() {
-    if(btnAdc.disabled == false) {
-        btnAdc.disabled = true;
-    } else {
-        btnAdc.disabled = false;
-    }
+    btnAdc.disabled = !this.checked
 })
 
-const spanCaracteres = document.querySelector('#contador span');
+const divContador = document.querySelector('#contador');
+const restante = divContador.querySelector('span');
+const tamanhoMaximo = descricao.maxLength;
 
-descricao.addEventListener('keyup', function () {
-    spanCaracteres.textContent = 255 - descricao.value.length;
+descricao.addEventListener('input', function () {
+    divContador.style.display = "block"
+    restante.textContent = parseInt(tamanhoMaximo) - parseInt(descricao.value.length);
 });
 
 const feedbackMessage = document.getElementById('feedbackMessage');
-const fechar = document.querySelector('.fa-close');
 
-btnAdc.addEventListener('click', function() {
-    if (titulo.value.length != 0 && descricao.value.length) {
-        feedbackMessage.style.color = 'white';
-        feedbackMessage.style.backgroundColor = 'green'
+formulario.addEventListener('submit', function (e) {
+    
+    if (!titulo.value || !descricao.value) {
+        e.preventDefault()
+        feedbackMessage.removeAttribute('style')
+        feedbackMessage.firstElementChild.innerHTML = "Preencha todos os campos para prosseguir."
         feedbackMessage.classList.add('show');
-    } else if (titulo.value.length == 0) {
+        fechar.focus()
+        fechar.addEventListener('keyup', esconder())
+    } else {
+        feedbackMessage.firstElementChild.innerHTML = "Sua atividade foi registrada."
+        feedbackMessage.style.backgroundColor = "green"
+        feedbackMessage.style.color = "white"
         feedbackMessage.classList.add('show');
-        titulo.focus()
+        
     }
 })
 
 
+const fechar = feedbackMessage.getElementsByTagName('button')[0];
 fechar.addEventListener('click', function() {
     feedbackMessage.classList.remove('show');
+    titulo.focus()
 })

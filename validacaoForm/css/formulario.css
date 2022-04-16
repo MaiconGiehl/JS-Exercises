@@ -121,6 +121,7 @@ textarea{
     border: none;
     font-size: 1.25em;
     color: #652f2f;
+    cursor: pointer;
 }
 
 #feedbackMessage.show{
