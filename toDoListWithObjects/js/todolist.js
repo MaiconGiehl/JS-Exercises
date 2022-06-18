@@ -4,35 +4,30 @@
 
     function Task(name, completed, createdAt, updatedAt) {
 
-        // toggleDone = function(completed) {
-        // if (completed == true) {
-        // obj.completed = false;
-        // } else {
-        // obj.completed = true;
-        // }
-        // }
-
-        // create a constructor function called Task.
-        // this function receives the name of the task as a mandatory parameter
-        // also receives three optional parameters (completed, createdAt, updatedAt)
-        // the object returned by this function must have four properties:
-        // - name - string - required,
-        // - completed - boolean - optional, false is the default,
-        // - createdAt - timestamp - optional, current timestamp is the default value)
-        // - updatedAt - timestamp - optional, null is the default value
-        // the object returned by this function must have a method called toggleDone, which must invert the boolean completed
-
         if (!name) {
             throw new Error("Task need a required parameter: name");
         }
-        this.name = name;
+
+        let _name = name;
+        // underline means "private"
+
         this.completed = completed || false;
         this.createdAt = createdAt || Date.now();
         this.updatedAt = updatedAt || null;
         this.toggleDone = function () {
             this.completed = !this.completed;
         }
+
+        this.getName = () => _name;
+
+        this.setName = function (newName) {
+            _name = newName;
+            this.updatedAt = Date.now();
+            console.log("-------")
+            console.log(this)
+        }
     }
+
 
 
     let arrTasks = [
@@ -54,10 +49,6 @@
             updatedAt: 1593677457010
         }
     ]
-
-
-    // from an array of literal objects, create an array containing instances of Tasks.
-    // This array must call arrInstancesTasks
 
     const arrInstancesTasks = arrTasks.map(task => {
         const { name, completed, createdAt, updatedAt } = task
@@ -89,7 +80,7 @@
         li.appendChild(checkButton)
 
         p.className = "task-name"
-        p.textContent = obj.name
+        p.textContent = obj.getName();
         li.appendChild(p)
 
         editButton.className = "fas fa-edit"
@@ -102,7 +93,7 @@
         const inputEdit = document.createElement("input")
         inputEdit.setAttribute("type", "text")
         inputEdit.className = "editInput"
-        inputEdit.value = obj.name
+        inputEdit.value = obj.getName();
 
         containerEdit.appendChild(inputEdit)
         const containerEditButton = document.createElement("button")
@@ -135,8 +126,6 @@
     }
 
     function addTask(task) {
-        // add a new Task instance
-        // arrInstancesTasks.push(task);
         arrInstancesTasks.push(new Task(task));
         renderTasks();
 
@@ -163,7 +152,6 @@
 
                 editContainer.style.display = "flex";
 
-
             },
             deleteButton: function () {
                 arrInstancesTasks.splice(currentLiIndex, 1)
@@ -172,16 +160,14 @@
             },
             containerEditButton: function () {
                 const val = currentLi.querySelector(".editInput").value
-                arrInstancesTasks[currentLiIndex].name = val
+                arrInstancesTasks[currentLiIndex].setName(val);
                 renderTasks()
             },
             containerCancelButton: function () {
                 currentLi.querySelector(".editContainer").removeAttribute("style")
-                currentLi.querySelector(".editInput").value = arrInstancesTasks[currentLiIndex].name
+                currentLi.querySelector(".editInput").value = arrInstancesTasks[currentLiIndex].getName();
             },
             checkButton: function () {
-
-                // MUST USE THE toggleDone METHOD of the correct object
                 arrInstancesTasks[currentLiIndex].toggleDone();
                 renderTasks();
             }
