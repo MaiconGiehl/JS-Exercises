@@ -2,47 +2,69 @@
     "use strict"
 
 
+    function Task(name, completed, createdAt, updatedAt) {
 
-	function Task(name, completed, createdAt, updatedAt){
-		// crie uma funcao construtora chamada Task. 
-        // essa funcao recebe por parametro obrigatório o nome da tarefa
-        // também recebe tres parametros opcionais (completed, createdAt, updatedAt)
-        // o objeto retornado por essa funcao deve ter quatro propriedades:
-        //  - name - string - obrigatório, 
-        //  - completed - boolean - opcional, false é o default, 
-        //  - createdAt - timestamp - opcional, timestamp atual é o valor default) 
-        //  - updatedAt - timestamp - opcional, null é o valor default
-        // o objeto retornado por essa funcao deve ter um método chamado toggleDone, que deve inverter o boolean completed
-	}
+        // toggleDone = function(completed) {
+        // if (completed == true) {
+        // obj.completed = false;
+        // } else {
+        // obj.completed = true;
+        // }
+        // }
 
-	let arrTasks = [
-		{
-			name: "task 1",
-			completed: true,
-			createdAt: 1592667375012,
-			updatedAt: null
-		},
-		{
-			name: "task 2",
-			createdAt: 1581667345723,
-			updatedAt: 1592667325018
-		},
-		{
-			name: "task 3",
-			completed: true,
-			createdAt: 1592667355018,
-			updatedAt: 1593677457010
-		}
-	]
+        // create a constructor function called Task.
+        // this function receives the name of the task as a mandatory parameter
+        // also receives three optional parameters (completed, createdAt, updatedAt)
+        // the object returned by this function must have four properties:
+        // - name - string - required,
+        // - completed - boolean - optional, false is the default,
+        // - createdAt - timestamp - optional, current timestamp is the default value)
+        // - updatedAt - timestamp - optional, null is the default value
+        // the object returned by this function must have a method called toggleDone, which must invert the boolean completed
 
-
-    // a partir de um array de objetos literais, crie um array contendo instancias de Tasks. 
-    // Essa array deve chamar arrInstancesTasks
-	// const arrInstancesTasks = DESCOMENTE ESSA LINHA E RESOLVA O ENUNCIADO
+        if (!name) {
+            throw new Error("Task need a required parameter: name");
+        }
+        this.name = name;
+        this.completed = completed || false;
+        this.createdAt = createdAt || Date.now();
+        this.updatedAt = updatedAt || null;
+        this.toggleDone = function () {
+            this.completed = !this.completed;
+        }
+    }
 
 
+    let arrTasks = [
+        {
+            name: "task 1",
+            completed: true,
+            createdAt: 1592667375012,
+            updatedAt: null
+        },
+        {
+            name: "task 2",
+            createdAt: 1581667345723,
+            updatedAt: 1592667325018
+        },
+        {
+            name: "task 3",
+            completed: true,
+            createdAt: 1592667355018,
+            updatedAt: 1593677457010
+        }
+    ]
 
-    //ARMAZENAR O DOM EM VARIAVEIS
+
+    // from an array of literal objects, create an array containing instances of Tasks.
+    // This array must call arrInstancesTasks
+
+    const arrInstancesTasks = arrTasks.map(task => {
+        const { name, completed, createdAt, updatedAt } = task
+        return new Task(name, completed, createdAt, updatedAt);
+    });
+
+    // STORE THE DOM IN VARIABLES
     const itemInput = document.getElementById("item-input")
     const todoAddForm = document.getElementById("todo-add")
     const ul = document.getElementById("todo-list")
@@ -113,8 +135,10 @@
     }
 
     function addTask(task) {
-        // adicione uma nova instancia de Task
-        renderTasks()
+        // add a new Task instance
+        // arrInstancesTasks.push(task);
+        arrInstancesTasks.push(new Task(task));
+        renderTasks();
 
     }
 
@@ -157,9 +181,9 @@
             },
             checkButton: function () {
 
-                // DEVE USAR O MÉTODO toggleDone do objeto correto
-
-	            renderTasks()
+                // MUST USE THE toggleDone METHOD of the correct object
+                arrInstancesTasks[currentLiIndex].toggleDone();
+                renderTasks();
             }
         }
 
